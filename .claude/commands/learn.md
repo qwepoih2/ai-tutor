@@ -111,13 +111,34 @@ curl -s --connect-timeout 10 --max-time 15 https://raw.githubusercontent.com/{ow
 - 先展示内容，然后问我："是否写入 {topic}/practice/01-demo.{ext}？"
 - 我确认后才写入
 
-#### 文件 3：`daily/YYYY-MM-DD.md`
+#### 文件 3：`{topic}/roadmap/plan.md`（可选）
+- 基于 lessons 第 11 节「下一步」生成学习路线
+- 内容格式：
+  ```
+  # {技术名} 学习路线
+
+  ## 阶段 1：基础认知（已完成）
+  - [x] 01-overview：基本概念、安装、入门
+  - [x] 01-demo：最小可运行 Demo
+
+  ## 阶段 2：…（待开始）
+  - …
+
+  ## 阶段 3：…（待开始）
+  - …
+  ```
+- 阶段 2 起按优先级排列后续学习主题，每阶段 2~4 条具体任务
+- 先展示内容，然后问我："是否写入 {topic}/roadmap/plan.md？"
+- 我确认后才写入；若跳过，则在目录收尾时用 `.gitkeep` 占位
+
+#### 文件 4：`daily/YYYY-MM-DD.md`
 - 使用今天的日期
 - 内容：追加一条学习记录，格式如下：
   ```
   ## 学习：{技术名}
   - 完成了 {topic}/lessons/01-overview.md（基本概念与入门）
   - 完成了 {topic}/practice/01-demo.{ext}（入门 Demo）
+  - 创建了 {topic}/roadmap/plan.md（学习路线）（若上一步已写入）
   - 关键收获：（用 2~3 句话总结）
   - 待深入：（从 section 11 提取）
   ```
@@ -128,8 +149,9 @@ curl -s --connect-timeout 10 --max-time 15 https://raw.githubusercontent.com/{ow
 ### 第三步：目录收尾
 
 所有文件写入后，检查 `{topic}/` 下的子目录结构：
-- 确保 `homework/`、`roadmap/`、`prompts/`、`resources/` 子目录已创建
-- 空目录用 `.gitkeep` 占位
+- 确保 `homework/` 已创建；若尚无内容，用 `.gitkeep` 占位
+- 确保 `roadmap/` 已创建；若未写入 plan.md，用 `.gitkeep` 占位
+- `prompts/`、`resources/` 按需处理：本次流程产生了对应内容时才创建并写入；无内容则不创建空目录
 
 ### 重要约束
 
