@@ -8,15 +8,37 @@
 
 ### 第一步：信息收集
 
-使用 WebSearch 搜索以下信息（每项独立搜索，确保准确）：
-1. "$ARGUMENTS GitHub" — 获取 GitHub 仓库地址、Star 数、最新版本、许可证
-2. "$ARGUMENTS official documentation" — 获取官网地址、文档链接
-3. "$ARGUMENTS vs alternatives" — 获取与同类工具的对比信息
-4. "$ARGUMENTS getting started tutorial" — 获取入门示例
+分两层收集信息，避免重复搜索：
 
-### 第二步：生成学习材料
+#### 1a. GitHub API 获取结构化数据（优先）
 
-按以下 12 个 section 生成完整内容，每个 section 都要有实质内容，不能只写一句话：
+如果目标是 GitHub 项目，用 `curl api.github.com` 一次性获取：
+- Star 数、最新版本、许可证、主要语言、仓库描述
+- 用 `curl api.github.com/repos/{owner}/{repo}/releases/latest` 获取最新版本和发布日期
+
+#### 1b. 获取 README 全文
+
+用 `curl` 获取 GitHub raw 链接的 README.md（注意尝试 main 和 develop 分支）：
+```bash
+curl -s --connect-timeout 10 --max-time 15 https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md
+```
+如果目标不是 GitHub 项目，用 WebFetch 获取官网文档。
+
+#### 1c. WebSearch 补充（1~2 次）
+
+用精确关键词（非全称拼接）搜索 API 拿不到的信息：
+1. "$关键词 vs alternatives" — 同类工具对比、社区评价
+2. "$关键词 getting started" — 入门教程、实战经验
+
+> 搜索 query 用精炼关键词，不要重复 $ARGUMENTS 全称。例如 $ARGUMENTS 是"学习RTK（Rust Token Killer）"，搜索用 "rtk rust token killer"。
+
+### 第二步：生成学习材料并逐文件确认
+
+**不要**先生成全部内容再确认。直接进入逐文件确认流程，每个文件确认时展示对应内容。
+
+#### 文件 1：`{topic}/lessons/01-overview.md`
+- `{topic}` 使用小写英文名称（如 react、tokio、kubernetes）
+- 内容包含以下 11 个 section，每个 section 都要有实质内容：
 
 ```
 ## 1. 基本信息
@@ -62,40 +84,31 @@
 格式：
 - **概念名**：解释
 
-## 10. 入门 Demo
-提供一个**最小可运行**的代码示例。
-要求：
-- 代码完整，复制即可运行
-- **每一行**都有中文注释，解释这行在做什么
-- 如果是多文件项目，标明文件路径
-- 给出运行命令和预期输出
-
-## 11. 常见坑
+## 10. 常见坑
 列出 3~5 个新手最容易犯的错误，每个包含：
 - **坑**：错误描述
 - **现象**：会遇到什么报错或异常行为
 - **解法**：如何避免或修复
 
-## 12. 下一步
+## 11. 下一步
 入门之后深入学习的方向，按优先级排列：
 - 推荐的学习顺序
 - 推荐资源（官方文档的哪个章节、哪个教程）
 ```
 
-### 第三步：逐文件确认写入
-
-生成完所有内容后，按以下顺序**逐个文件**向我确认：
-
-#### 文件 1：`lessons/{topic}/01-overview.md`
-- `{topic}` 使用小写英文名称（如 react、tokio、kubernetes）
-- 内容：section 1~9 + section 11~12
-- 先在终端展示完整内容，然后问我："是否写入 lessons/{topic}/01-overview.md？"
+- 先在终端展示完整内容，然后问我："是否写入 {topic}/lessons/01-overview.md？"
 - 我确认后才写入，我可以选择修改或跳过
 
-#### 文件 2：`practice/{topic}/01-demo.{ext}`
-- `{ext}` 根据技术类型自动判断（如 .rs / .jsx / .py / .go / .ts）
-- 内容：section 10 的代码部分（纯代码文件，注释写在代码里）
-- 先展示内容，然后问我："是否写入 practice/{topic}/01-demo.{ext}？"
+#### 文件 2：`{topic}/practice/01-demo.{ext}`
+- `{ext}` 根据技术类型自动判断（如 .rs / .jsx / .py / .go / .ts / .sh）
+- 内容：最小可运行的入门 Demo
+- 要求：
+  - **≤15 行**，只覆盖核心价值体验，不要变成速查表
+  - 代码完整，复制即可运行
+  - **每一行**都有中文注释，解释这行在做什么
+  - 如果是多文件项目，标明文件路径
+  - 给出运行命令和预期输出
+- 先展示内容，然后问我："是否写入 {topic}/practice/01-demo.{ext}？"
 - 我确认后才写入
 
 #### 文件 3：`daily/YYYY-MM-DD.md`
@@ -103,19 +116,25 @@
 - 内容：追加一条学习记录，格式如下：
   ```
   ## 学习：{技术名}
-  - 完成了 lessons/{topic}/01-overview.md（基本概念与入门）
-  - 完成了 practice/{topic}/01-demo.{ext}（入门 Demo）
+  - 完成了 {topic}/lessons/01-overview.md（基本概念与入门）
+  - 完成了 {topic}/practice/01-demo.{ext}（入门 Demo）
   - 关键收获：（用 2~3 句话总结）
-  - 待深入：（从 section 12 提取）
+  - 待深入：（从 section 11 提取）
   ```
 - 如果当天文件已存在，追加到末尾而不是覆盖
 - 先展示内容，然后问我："是否写入 daily/YYYY-MM-DD.md？"
 - 我确认后才写入
 
+### 第三步：目录收尾
+
+所有文件写入后，检查 `{topic}/` 下的子目录结构：
+- 确保 `homework/`、`roadmap/`、`prompts/`、`resources/` 子目录已创建
+- 空目录用 `.gitkeep` 占位
+
 ### 重要约束
 
-- 如果目标目录不存在，自动创建
-- 所有信息必须基于搜索结果，不要编造链接或版本号
+- 目录结构遵循 CLAUDE.md：`{topic}/lessons/`、`{topic}/practice/` 等
+- 所有信息必须基于搜索结果或 API 数据，不要编造链接或版本号
 - 如果搜索不到某项信息，明确标注"未找到"而不是瞎编
 - Demo 代码必须是最小可运行的，不要加多余的功能
 - 中文写作，代码注释也用中文
