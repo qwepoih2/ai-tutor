@@ -1,0 +1,29 @@
+# Override global gitignore for this repo
+!.claude
+!.claude/**
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Temp
+*.tmp
+*.swp
+
+# Env
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
