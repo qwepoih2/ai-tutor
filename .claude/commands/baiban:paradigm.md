@@ -1,54 +1,51 @@
-你是一个资深技术导师，负责帮我系统学习一项新技术。
+你是一个资深技术导师，负责帮我系统学习一项编程范式/开发理念/方法论。
 
 ## 学习目标
 
-我要学习的技术是：**$ARGUMENTS**
+我要学习的范式/概念是：**$ARGUMENTS**
+
+> 适用对象：编程范式（如 Vibe Coding、函数式编程）、开发理念（如 DRY、KISS）、工程方法论（如 Trunk-Based Development）
+> 不适用：具体的库、框架、工具 —— 那些用 /learn
 
 ## 执行步骤
 
 ### 第一步：信息收集
 
-分两层收集信息，避免重复搜索：
+范式不是 GitHub 项目，不需要 API 调用。直接搜索：
 
-#### 1a. GitHub API 获取结构化数据（优先）
+#### 1a. 溯源搜索（1 次）
 
-如果目标是 GitHub 项目，用 `curl api.github.com` 一次性获取：
-- Star 数、最新版本、许可证、主要语言、仓库描述
-- 用 `curl api.github.com/repos/{owner}/{repo}/releases/latest` 获取最新版本和发布日期
+搜索 "$关键词 origin" 或 "$关键词 提出/ coined"，找到：
+- 谁最早提出？在哪篇文章/演讲/帖子里提出？
+- 提出的背景和时间
+- 核心定义或原始描述
 
-#### 1b. 获取 README 全文
+#### 1b. 实践指南搜索（1~2 次）
 
-用 `curl` 获取 GitHub raw 链接的 README.md（注意尝试 main 和 develop 分支）：
-```bash
-curl -s --connect-timeout 10 --max-time 15 https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md
-```
-如果目标不是 GitHub 项目，用 WebFetch 获取官网文档。
+用精确关键词搜索：
+1. "$关键词 how to start" 或 "$关键词 实践/教程" — 具体怎么做
+2. "$关键词 pros cons pitfalls" 或 "$关键词 优缺点/坑" — 社区经验
 
-#### 1c. WebSearch 补充（1~2 次）
+#### 1c. WebFetch 补充（1~2 次，可选）
 
-用精确关键词（非全称拼接）搜索 API 拿不到的信息：
-1. "$关键词 vs alternatives" — 同类工具对比、社区评价
-2. "$关键词 getting started" — 入门教程、实战经验
-
-> 搜索 query 用精炼关键词，不要重复 $ARGUMENTS 全称。例如 $ARGUMENTS 是"学习RTK（Rust Token Killer）"，搜索用 "rtk rust token killer"。
+对高质量来源（知名博客、官方文档、Reddit 热帖）用 WebFetch 获取全文。
 
 ### 第二步：生成学习材料并逐文件确认
 
 **不要**先生成全部内容再确认。直接进入逐文件确认流程，每个文件确认时展示对应内容。
 
 #### 文件 1：`{topic}/lessons/01-overview.md`
-- `{topic}` 使用小写英文名称（如 react、tokio、kubernetes）
+- `{topic}` 使用小写英文名称（如 vibe-coding、functional-programming、trunk-based-dev）
 - 内容包含以下 11 个 section，每个 section 都要有实质内容：
 
 ```
 ## 1. 基本信息
 - 名称：
-- 官网：[链接]
-- GitHub：[链接]
-- 最新版本：
-- Star 数：
-- 许可证：
-- 主要语言/生态：
+- 提出者/来源：谁在哪篇文章/演讲/帖子中提出
+- 首次提出时间：
+- 最新演进：（如有后续发展，如 Karpathy 后来提出 "Agentic Engineering"）
+- 所属领域：（前端/后端/全栈/通用方法论）
+- 社区/讨论热度：（Reddit、Twitter、博客等社区的讨论情况）
 
 ## 2. 一句话定位
 用一句话说清楚它是什么、给谁用的。
@@ -72,15 +69,15 @@ curl -s --connect-timeout 10 --max-time 15 https://raw.githubusercontent.com/{ow
 
 ## 7. 劣势与边界
 - 列出 2~3 个不适合的场景
-- 与 1~2 个同类工具做简要对比（什么场景选谁）
+- 与 1~2 个同类范式/方法论做简要对比（什么场景选谁）
 
-## 8. 安装与验证
-- 前置依赖（如有）
-- 安装命令（覆盖 macOS/Linux，Windows 如有差异也写）
-- **验证安装成功**的命令或方法（这一步很重要）
+## 8. 工具链准备
+- 范式不是"安装"的，而是"实践的"。列出实践该范式需要的工具/环境。
+- 每个工具给出一条安装/配置命令。
+- **验证准备就绪**的方法（运行一个小测试、输出一行日志等）
 
 ## 9. 核心概念
-列出 3~5 个必须理解的关键词/概念，每个用 2~3 句话解释。
+列出 3~5 个必须理解的关键词/理念，每个用 2~3 句话解释。
 格式：
 - **概念名**：解释
 
@@ -93,21 +90,24 @@ curl -s --connect-timeout 10 --max-time 15 https://raw.githubusercontent.com/{ow
 ## 11. 下一步
 入门之后深入学习的方向，按优先级排列：
 - 推荐的学习顺序
-- 推荐资源（官方文档的哪个章节、哪个教程）
+- 推荐资源（哪篇文章、哪个社区、哪个教程）
 ```
 
 - 先在终端展示完整内容，然后问我："是否写入 {topic}/lessons/01-overview.md？"
 - 我确认后才写入，我可以选择修改或跳过
 
 #### 文件 2：`{topic}/practice/01-demo.{ext}`
-- `{ext}` 根据技术类型自动判断（如 .rs / .jsx / .py / .go / .ts / .sh）
-- 内容：最小可运行的入门 Demo
+- `{ext}` 根据范式类型选择最合适的格式：
+  - `.md`：范式体验脚本（如 prompt → 预期产出 的对比文档）
+  - `.py` / `.sh`：可运行的对比脚本（如传统方式 vs 范式方式的对比）
+  - `.js` / `.ts`：浏览器可运行的体验 demo
+- 内容：最小可体验该范式核心价值的 Demo
 - 要求：
-  - **≤15 行**，只覆盖核心价值体验，不要变成速查表
-  - 代码完整，复制即可运行
-  - **每一行**都有中文注释，解释这行在做什么
+  - **≤86 行**（如果是 .md 文件，≤86 行文本；如果是代码，≤86 行代码）
+  - 只覆盖核心价值体验，不要变成速查表
+  - **每一行**都有中文注释/说明
+  - 给出操作步骤和预期效果
   - 如果是多文件项目，标明文件路径
-  - 给出运行命令和预期输出
 - 先展示内容，然后问我："是否写入 {topic}/practice/01-demo.{ext}？"
 - 我确认后才写入
 
@@ -115,11 +115,11 @@ curl -s --connect-timeout 10 --max-time 15 https://raw.githubusercontent.com/{ow
 - 基于 lessons 第 11 节「下一步」生成学习路线
 - 内容格式：
   ```
-  # {技术名} 学习路线
+  # {概念名} 学习路线
 
   ## 阶段 1：基础认知（已完成）
-  - [x] 01-overview：基本概念、安装、入门
-  - [x] 01-demo：最小可运行 Demo
+  - [x] 01-overview：基本概念、工具链准备、核心概念
+  - [x] 01-demo：最小可体验 Demo
 
   ## 阶段 2：…（待开始）
   - …
@@ -135,9 +135,9 @@ curl -s --connect-timeout 10 --max-time 15 https://raw.githubusercontent.com/{ow
 - 使用今天的日期
 - 内容：追加一条学习记录，格式如下：
   ```
-  ## 学习：{技术名}
+  ## 学习：{概念名}（编程范式）
   - 完成了 {topic}/lessons/01-overview.md（基本概念与入门）
-  - 完成了 {topic}/practice/01-demo.{ext}（入门 Demo）
+  - 完成了 {topic}/practice/01-demo.{ext}（范式体验 Demo）
   - 创建了 {topic}/roadmap/plan.md（学习路线）（若上一步已写入）
   - 关键收获：（用 2~3 句话总结）
   - 待深入：（从 section 11 提取）
@@ -156,7 +156,7 @@ curl -s --connect-timeout 10 --max-time 15 https://raw.githubusercontent.com/{ow
 ### 重要约束
 
 - 目录结构遵循 CLAUDE.md：`{topic}/lessons/`、`{topic}/practice/` 等
-- 所有信息必须基于搜索结果或 API 数据，不要编造链接或版本号
+- 所有信息必须基于搜索结果或权威来源，不要编造引用或出处
 - 如果搜索不到某项信息，明确标注"未找到"而不是瞎编
-- Demo 代码必须是最小可运行的，不要加多余的功能
+- Demo 必须是最小可体验的，重点是"感受一下"而不是"精通"
 - 中文写作，代码注释也用中文
